@@ -1,0 +1,12 @@
+{
+    "rule":[
+        {
+            "action":{"type":"Delete", "isLive": false, "age": 2},
+            "condition":{"age":3}
+        },
+        {
+            "action":{"type":"SetStorageClass", "storageClass":"NEARLINE"},
+            "condition":{"age":1}
+        }
+    ]
+}
