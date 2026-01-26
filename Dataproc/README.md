@@ -23,7 +23,8 @@ gcloud dataproc clusters create hands-on-cluster \
 --worker-machine-type=e2-standard-2 \
 --num-workers=2 \
 --optional-components=JUPYTER \
---enable-gateway-component
+--enable-component-gateway \
+--image-version=2.1-debian11
 ```
 **Arguments explanation:**
 
@@ -128,7 +129,7 @@ gcloud dataproc jobs submit spark \
 gcloud dataproc jobs submit spark-sql \
 --region us-central1 \
 --cluster hands-on-cluster \
---execute-query 'SELECT COUNT(*) FROM my_table'
+--execute 'SELECT COUNT(*) FROM my_table'
 ```
 OR 
 ```bash
@@ -143,7 +144,7 @@ gclud dataproc jobs submit spark-sql \
 gcloud dataproc jobs submit hive \
 --region us-central1 \
 --cluster hands-on-cluster \
---execute-query 'SELECT * FROM my_table LIMIT 10'
+--execute 'SELECT * FROM my_table LIMIT 10'
 ```
 OR 
 ```bash
