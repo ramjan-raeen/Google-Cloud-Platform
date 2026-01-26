@@ -103,8 +103,58 @@ gcloud dataproc jobs submit pyspark gs://my-bucket/my-script.py \
 --cluster hands-on-cluster \
 --bucket my-bucket/staging
 ```
-## List jobs
+
+## Submit a Hadoop job
 ```bash
+gcloud dataproc jobs submit hadoop \
+--region us-central1 \
+--cluster hands-on-cluster \
+--class org.apache.hadoop.examples.WordCount \
+--jars file:///usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar \
+-- gs://my-bucket/input.txt gs://my-bucket/output/
+```
+## Submit a Spark job
+```bash
+gcloud dataproc jobs submit spark \
+--region us-central1 \
+--cluster hands-on-cluster \
+--class org.apache.spark.examples.SparkPi \
+--jars file:///usr/lib/spark/examples/jars/spark-examples.jar \
+-- 1000
+```
+
+## Submit a Spark SQL job
+```bash
+gcloud dataproc jobs submit spark-sql \
+--region us-central1 \
+--cluster hands-on-cluster \
+--execute-query 'SELECT COUNT(*) FROM my_table'
+```
+OR 
+```bash
+gclud dataproc jobs submit spark-sql \
+--region us-central1 \
+--cluster hands-on-cluster \
+--file gs://my-bucket/my-spark-sql-script.sql
+```
+
+## Submit a Hive job
+```bash
+gcloud dataproc jobs submit hive \
+--region us-central1 \
+--cluster hands-on-cluster \
+--execute-query 'SELECT * FROM my_table LIMIT 10'
+```
+OR 
+```bash
+gcloud dataproc jobs submit hive \
+--region us-central1 \
+--cluster hands-on-cluster \
+--file gs://my-bucket/my-hive-script.hql
+```
+
+## List jobs
+```
 gcloud dataproc jobs list --region us-central1
 ```
 ## Describe a job
