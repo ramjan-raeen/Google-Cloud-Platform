@@ -17,14 +17,32 @@ Dataproc is a managed service for running Apache Spark and Apache Hadoop cluster
 
 ```bash 
 gcloud dataproc clusters create hands-on-cluster \
---region us-central1 \
---zone us-central1-a \
+--region=us-central1 \
+--zone=us-central1-a \
+\
 --master-machine-type=e2-standard-4 \
 --worker-machine-type=e2-standard-2 \
 --num-workers=2 \
+\
+--network=default \
+--subnet=default \
+--no-address \
+\
+--service-account=dataproc-sa@PROJECT_ID.iam.gserviceaccount.com \
+--scopes=https://www.googleapis.com/auth/cloud-platform \
+\
+--image-version=2.1-debian11 \
 --optional-components=JUPYTER \
 --enable-component-gateway \
---image-version=2.1-debian11
+\
+--properties=\
+spark:spark.sql.shuffle.partitions=200,\
+spark:spark.executor.memory=4g,\
+spark:spark.driver.memory=2g \
+\
+--max-idle=1h \
+--bucket=dataproc-staging-bucket
+
 ```
 **Arguments explanation:**
 
@@ -38,7 +56,16 @@ gcloud dataproc clusters create hands-on-cluster \
 - `--master-machine-type`: Specifies the machine type for the master node.
 - `--worker-machine-type`: Specifies the machine type for the worker nodes.
 - `--num-workers`: Specifies the number of worker nodes in the cluster.
-- optional-components: Specifies additional components to be installed on the cluster, such as Jupyter.
+- `--optional-components`: Specifies additional components to be installed on the cluster, such as Jupyter.
+- `--network`: Specifies the VPC network for the cluster.
+- `--subnet`: Specifies the subnet within the VPC network.
+- `--no-address`: Indicates that the cluster nodes will not have external IP addresses.
+- `--service-account`: Specifies the service account to be used by the cluster.
+- `--scopes`: Specifies the OAuth scopes for the service account.
+- `--image-version`: Specifies the Dataproc image version to be used for the cluster.
+- `--properties`: Specifies configuration properties for Spark and Hadoop.
+- `--max-idle`: Specifies the maximum idle time before the cluster is automatically deleted.
+- `--bucket`: Specifies the Cloud Storage bucket for staging files.
 - `--enable-gateway-component`: Enables the gateway component for accessing web interfaces like Jupyter.
 
 **What is machine type?**
