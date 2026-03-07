@@ -684,3 +684,9 @@ SAP → ETL → Reconciliation → Quality Checks → Analytics
 |Data Validation / Cleansing|	Fix and standardize data	|Improve usability
 |Data Governance|	Control access and compliance	|Maintain integrity and traceability
 |MDM / Lineage|	Manage master entities & flow	|Consistency and transparency
+
+# Official Resources
+- [Apache Spark Documentation](https://spark.apache.org/docs/latest/)
+- [Hadoop MapReduce Documentation](https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html)
+- [Dataproc Documentation](https://cloud.google.com/dataproc/docs)
+- [BigQuery Documentation](https://cloud.google.com/bigquery/docs)
