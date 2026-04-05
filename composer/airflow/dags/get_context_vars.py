@@ -1,3 +1,12 @@
+# Author        :   Ramjan
+# Date          :   2025-06-10
+# Last Modified :   2026-04-05
+# Purpose       :   Access context variable and understanding the actual meaning and use of context variable.
+
+
+
+
+
 from datetime import datetime, timedelta
 
 from airflow import DAG
@@ -5,13 +14,14 @@ from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 
 default_args = {
-    'owner': 'airflow',
+    'owner': 'Ramjan',
     'depends_on_past': False,
     'start_date': datetime(2025,6,20),
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
     'retry_delay': timedelta(minutes=1),
+    'retries': 1
+    
 }
 
 
@@ -37,9 +47,9 @@ def get_context_vars(*args, **kwargs):
     print(f"data_interval_end/the time when the job finished processing data: {kwargs['dag_run'].data_interval_end}")
 
 with DAG(
-    dag_id='get_context_vars_dag',
+    dag_id='access_context_vars',
     default_args=default_args,
-    description='A DAG to fetch context variables',
+    description='Access and understanding of actual meaning of each contex variables',
     schedule='@daily',
     catchup=False,
 ) as dag:
@@ -52,11 +62,10 @@ with DAG(
         op_args=[101, 100],
         op_kwargs={'primary_skill':'GCP', 'secondary_skill':'Python'},
         
-        
     )
     task3 = EmptyOperator(
         task_id='end'
     )
-  
 
-    task1 >> task2 >> task3
+
+task1 >> task2  >> task3

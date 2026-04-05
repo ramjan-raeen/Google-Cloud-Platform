@@ -1,5 +1,15 @@
+# Author        :   Ramjan Raeen
+# Date          :   2026-04-04
+# Last Modified :   2026-04-04
+# Purpose       :   The puepose of the this DAG is that extract data from gcs,
+#                   transform it and load into bigquery table.
+
+# Note:
 # To execute dags using airflow command to need to pass logical-date as param instead execution_date as default
 # airflow dags trigger extract_transform_load_gcs_to_gbq --logical-date "$(date -Iseconds)"
+
+
+
 
 
 from datetime import datetime, timedelta
@@ -8,16 +18,17 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
-from airflow.providers.google.cloud.operators.gcs import GCSListObjectsOperator
+
 from google.cloud import storage
 
+
 default_args = {
-    'owner': 'airflow',
+    'owner': 'Ramjan',
     'depends_on_past': False,
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
-    'retry_delay': timedelta(minutes=1)
+    'retry_delay': timedelta(minutes=1),
+    'retries': 1
 }
 
 
@@ -38,7 +49,7 @@ with DAG(
     default_args=default_args,
     description='A DAG to extract data from GCS, transform it, and load it into BigQuery',
     start_date=datetime(2025, 6, 20),
-    schedule='@daily',
+    schedule='0 0 * * *', # Scheduled everyday mid night at 12:00 AM UTC
     catchup=False,
 ) as dag:
     start = EmptyOperator(
@@ -59,7 +70,7 @@ with DAG(
         destination_project_dataset_table='hands-on-dev-202409.university_data.student_habits_performance',
         source_format='CSV',
         skip_leading_rows=1,
-        write_disposition='WRITE_APPEND',
+        write_disposition='WRITE_TRUNCATE',
         create_disposition='CREATE_IF_NEEDED',
         field_delimiter=',',
         autodetect=True,

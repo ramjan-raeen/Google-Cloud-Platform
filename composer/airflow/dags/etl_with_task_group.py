@@ -1,12 +1,23 @@
+# Author        :   Ramjan
+# Date          :   2025-09-20
+# Last Modified :   2026-04-05
+# Purpose       :   This DAG's purpose is extract data from gcs bucket, 
+#                   transform it and load to bigquery and use task group
+#                   group the similar kind of activity. 
+
+
 #   Trigger the DAG using the command: time should be in UTC
 # airflow dags trigger task_group_dag --logical-date 2025-09-21T10:37:00+00:00
 # airflow dags trigger task_group_dag --logical-date "$(date -Iseconds)"
 
+
+
+from datetime import datetime, timedelta
+
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
-from airflow.operators.python import PythonOperator
 from airflow.utils.task_group import TaskGroup
-from datetime import datetime, timedelta
+
 
 from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
 from airflow.providers.google.cloud.operators.bigquery import BigQueryInsertJobOperator

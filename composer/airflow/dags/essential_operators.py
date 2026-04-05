@@ -1,8 +1,17 @@
+# Author            :   Ramjan Raeen
+# Date              :   2025-09-19
+# Last Modified     :   2026-04-05
+# Purpose           :   Understanding the implementation of essential airflow operators.
+
+
+
+
+
 import random
 import pendulum
 
-
 from datetime import datetime, timedelta
+
 
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
@@ -10,6 +19,17 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator, ShortCircuitOperator
 from airflow.operators.python import BranchPythonOperator
 from airflow.utils.trigger_rule import TriggerRule
+
+
+default_args = {
+    'owner': 'Ramjan',
+    'depends_on_past': False,
+    'email_on_failures' : False,
+    'email_on_retry' : False,
+    'retry_delay' : timedelta(minutes=1),
+    'retries' : 1
+}
+
 
 
 def is_weekend():
@@ -54,19 +74,12 @@ def find_max_number(numbers):
     print(f"The maximum number is: {max_num}")
     return max_num
 
-default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'email_on_failures' : False,
-    'email_on_retry' : False,
-    'retries' : 1,
-    'retry_delay' : timedelta(minutes=1)
-}
+
 
 with DAG(
-    dag_id='basic_operator_dag_v2',
+    dag_id='essential_operators',
     default_args=default_args,
-    description='A simple DAG for demonstration purposes v2',
+    description='understanding the impelmentation of essential operator',
     start_date=datetime(2025, 9, 19),
     schedule='@daily',
     catchup=False,
@@ -103,5 +116,7 @@ with DAG(
         task_id='end',
         trigger_rule=TriggerRule.ONE_SUCCESS
     )
+
+
 
 start >> bash_task >> task_01 >> short_circuit_task >> task_02 >> [task_03, task_04] >> task_05
