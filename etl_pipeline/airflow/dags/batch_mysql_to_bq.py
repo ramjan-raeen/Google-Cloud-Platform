@@ -12,6 +12,8 @@ from airflow.operators.python import PythonOperator
 
 from utils.extract_mysql_utils import extract_mysql
 from utils.load_bq_utils import load_bigquery
+from utils.manifest_utils import create_manifest, complete_manifest
+
 from utils.validation import validate
 
 default_args={
@@ -38,11 +40,35 @@ TEMP_FILE = "/tmp/customers.parquet"
 
 def insert_manifest(**kwargs):
     ti = kwargs['ti']
+    source_count = ti.xcom_pull(
+        task_ids="extracted",
+        key = "return_value"
+    )
+    create_manifest(
+        postgres_conn_id="warehouse_postgres",
+        run_id = kwargs['run_id'],
+        dag_id = kwargs['dag'].dag_id,
+        source_system="MySQL",
+        source_table="dim_date",
+        source_row_count = source_count,
+    )
 
-    pass
+def update_manifest(**kwargs):
+    ti = kwargs['ti']
+    target_count = ti.xcom_pull(
+        task_ids="load_to_bigquery",
+        key="return_value"
+    )
 
-def update_manifest():
-    pass
+    complete_manifest(
+        postgres_conn_id="warehouse_postgres",
+        run_id=kwargs['run_id'],
+        source_table="dim_date",
+        target_system="BigQuery",
+        target_table="raw_data.dim_date",
+        target_row_count=target_count,
+        status="SUCCESS"
+    )
 
 
 with DAG(dag_id='batch_mysql_to_bq',

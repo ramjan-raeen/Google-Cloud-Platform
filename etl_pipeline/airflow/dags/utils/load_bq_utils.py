@@ -31,4 +31,6 @@ def load_bigquery(gcp_conn_id, project_id, dataset_id, table_name, file_name):
         )
         job.result()
         table = client.get_table(table_id)
-        print(f"Loaded {table.num_rows} rows into BigQuery table: {table} Successfully !!")
+        target_count =table.num_rows
+        print(f"Loaded {target_count} rows into BigQuery table: {table} Successfully !!")
+        return target_count
