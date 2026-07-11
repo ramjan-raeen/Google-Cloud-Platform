@@ -1,0 +1,17 @@
+# apache-airflow-providers-google
+
+apache-airflow-providers-postgres
+
+apache-airflow-providers-mysql
+
+# apache-airflow-providers-apache-kafka
+
+mysql-connector-python
+
+kafka-python
+
+pandas
+
+requests
+
+pymysql
