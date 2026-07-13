@@ -14,7 +14,6 @@ from utils.extract_mysql_utils import extract_mysql
 from utils.load_bq_utils import load_bigquery
 from utils.manifest_utils import create_manifest, complete_manifest
 
-from utils.validation import validate
 
 default_args={
     'owner':'airflow',
@@ -118,18 +117,8 @@ with DAG(dag_id='batch_mysql_to_bq',
         python_callable=update_manifest
     )
     
-    validation = PythonOperator(
-        task_id="validation",
-        python_callable=validate,
-        op_kwargs={
-            "gcp_conn_id":"google_cloud_default",
-            "project_id":PROJECT_ID,
-            "dataset_id":DATASET_ID,
-            "table_name":TABLE_NAME
-        }
-    )
 
         
 
 
-start >> extracted >> insert_manifest_task >> load_to_bigquery >> updata_manifest_task >> validation >> end
+start >> extracted >> insert_manifest_task >> load_to_bigquery >> updata_manifest_task >> end
