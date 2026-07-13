@@ -1,8 +1,12 @@
+# Author    :   Ramjan Raeen
+# Date      :   2026-07-12
+# Modified  :   2026-07-14
+# Purpose   :   migrate the mysql data and load into gcp bigquery table.
+
 from datetime import datetime
 from datetime import timedelta
 
 import pandas as pd
-from sqlalchemy import create_engine
 
 from airflow import DAG
 from airflow.models import Variable

@@ -1,4 +1,9 @@
-# @task
+# Author    :   Ramjan Raeen
+# Date      :   2026-07-12
+# Modified  :   2026-07-14
+# Purpose   :   created utils package to load data to gcp bigquery table.
+
+
 
 from google.cloud import bigquery
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
