@@ -52,7 +52,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./mysql-init:/docker-entrypoint-initdb.d
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/conf/my.cnf:/etc/mysql.conf.d/my.cnf
     ports: ["3306:3306"]
     healthcheck:
       test: ["CMD","mysqladmin","ping","-h","localhost"]
@@ -81,6 +82,9 @@ services:
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
     ports: ["9092:9092"]
     volumes:
       - kafka_data:/tmp/kraft-combined-logs
@@ -142,6 +146,23 @@ services:
     depends_on: [kafka]
     restart: unless-stopped
 
+  kafka-connect:
+
+    build:
+        context: ./kafka-connect
+
+    container_name: kafka-connect
+
+    ports:
+        - "8083:8083"
+
+    volumes:
+
+        - ./kafka-connect/connect-distributed.properties:/opt/kafka/config/connect-distributed.properties
+
+    command:
+
+        /opt/kafka/bin/connect-distributed.sh /opt/kafka/config/connect-distributed.properties
 volumes:
   postgres_data:
   mysql_data:
