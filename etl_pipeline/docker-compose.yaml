@@ -163,6 +163,28 @@ services:
     command:
 
         /opt/kafka/bin/connect-distributed.sh /opt/kafka/config/connect-distributed.properties
+  spark:
+    build:
+      context: ./spark
+
+    container_name: spark
+
+    hostname: spark
+
+    volumes:
+      - ./spark/app:/opt/spark-apps
+      - ./spark/checkpoint:/opt/checkpoint
+
+    depends_on:
+      - kafka
+
+    tty: true
+
+    stdin_open: true
+    
+    command: tail -f /dev/null
+
+
 volumes:
   postgres_data:
   mysql_data:
